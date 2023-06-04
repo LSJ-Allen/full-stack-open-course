@@ -1,23 +1,16 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
 
-const Hello = (props) => {
-  console.log(props);
+const App = () =>{
+  const [counter, setCounter] = useState(0)
+
   return(
     <div>
-      <p>Hello {props.name}, you are {props.age} old</p>
+      <div>{counter}</div>
+      <button onClick={() => setCounter(counter+1)}>plus</button>
+      <button onClick={() => setCounter(0)}>zero</button>
     </div>
-  );
-}
-
-function App() {
-  return (
-    <div className="App">
-    <h1>Greetings</h1>
-      <Hello name="George" age={26+10}/>
-      <Hello name="Daisy" />
-    </div>
-  );
+  )
 }
 
 export default App;
