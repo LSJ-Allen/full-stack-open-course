@@ -1,5 +1,6 @@
 import { useState } from "react"
 import personService from "../services/backend"
+import Message from "./Message"
 
 const AddPerson = ({persons, setPersons}) => {
     // lift the persons' state up to the App ancestor
@@ -8,6 +9,7 @@ const AddPerson = ({persons, setPersons}) => {
 
     // state to store the number
     const [newNumber, setNumber] = useState("")
+    const [msg, setMsg] = useState(null)
 
     // submission handler
     const addPerson = (event) => {
@@ -31,9 +33,13 @@ const AddPerson = ({persons, setPersons}) => {
             }
             personService.create(person)
                 .then(response => {
-                    setPersons(persons.concat(person))
+                    setPersons(persons.concat(response))
                     setName('')
                     setNumber('')
+                    setMsg(`Added ${response.name}`)
+                    setTimeout(() => {
+                        setMsg(null)
+                    }, 5000)
                 })
 
         } else{
@@ -60,6 +66,7 @@ const AddPerson = ({persons, setPersons}) => {
     }
     return ( 
         <>
+            <Message msg={msg}/>
             <h2>add new</h2>
             <form onSubmit={addPerson}>
                 <div>
