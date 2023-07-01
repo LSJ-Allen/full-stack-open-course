@@ -1,3 +1,4 @@
+// 
 const ListPerons = ({persons}) => {
     return ( 
         <div>
