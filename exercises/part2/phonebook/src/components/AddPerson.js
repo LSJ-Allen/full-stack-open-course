@@ -1,4 +1,5 @@
 import { useState } from "react"
+import personService from "../services/backend"
 
 const AddPerson = ({persons, setPersons}) => {
     // lift the persons' state up to the App ancestor
@@ -14,10 +15,12 @@ const AddPerson = ({persons, setPersons}) => {
         // console.log('button clicked', event.target)
 
         // check for repeated names
+        let id = -1
         let hasRepetition = false
         for(let i = 0; i < persons.length; i++){
             if(persons[i].name.localeCompare(newName)===0){
                 hasRepetition=true
+                id = persons[i].id
             }
         }
 
@@ -26,9 +29,23 @@ const AddPerson = ({persons, setPersons}) => {
                 name: newName,
                 number: newNumber
             }
-            setPersons(persons.concat(person))
+            personService.create(person)
+                .then(response => {
+                    setPersons(persons.concat(person))
+                    setName('')
+                    setNumber('')
+                })
+
         } else{
-            alert(`${newName} already exists.`)
+            if(window.confirm(`${newName} already exists, replace the old number with a new one?`)){
+                const originalPerson = persons.find(person => person.id === id)
+                const updatedPerson = {...originalPerson, number: newNumber}
+                personService.update(updatedPerson)
+                    .then((response => {
+                        console.log(response);
+                        setPersons(persons.map(p => p.id !== id ? p : response))
+                    }))
+            }
         }
         
     }
