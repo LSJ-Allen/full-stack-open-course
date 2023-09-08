@@ -41,6 +41,14 @@ const AddPerson = ({persons, setPersons}) => {
                         setMsg(null)
                     }, 5000)
                 })
+                .catch(error => {
+                    const errorMsg = error.response.data.error
+                    console.log(errorMsg)
+                    setMsg(errorMsg)
+                    setTimeout(() => {
+                        setMsg(null)
+                    }, 5000)
+                })
 
         } else{
             if(window.confirm(`${newName} already exists, replace the old number with a new one?`)){
